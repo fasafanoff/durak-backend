@@ -1,0 +1,10 @@
+setup.cfg
+setup.py
+durak/__init__.py
+durak/db.py
+durak.egg-info/PKG-INFO
+durak.egg-info/SOURCES.txt
+durak.egg-info/dependency_links.txt
+durak.egg-info/not-zip-safe
+durak.egg-info/requires.txt
+durak.egg-info/top_level.txt
