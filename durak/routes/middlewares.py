@@ -1,8 +1,5 @@
 from flask import request
-import jwt
 from functools import wraps
-from os import getenv
-from utils.constants import HASH_ALG, ExpiredSignature
 
 
 def required_fields(fields):

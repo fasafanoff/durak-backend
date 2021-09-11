@@ -1,7 +1,5 @@
 import json
-
-from durak.db import get_db
-from durak.utils.tokens_utils import generate_refresh_token, generate_access_token
+from durak.utils.tokens_utils import generate_access_token
 
 
 def test_token_no_data(client):

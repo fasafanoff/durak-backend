@@ -2,7 +2,7 @@ import datetime
 import jwt
 from os import getenv
 
-from utils.constants import HASH_ALG
+from durak.utils.constants import HASH_ALG
 
 SECRET_ACCESS_TOKEN = getenv("SECRET_ACCESS_TOKEN")
 SECRET_REFRESH_TOKEN = getenv("SECRET_REFRESH_TOKEN")

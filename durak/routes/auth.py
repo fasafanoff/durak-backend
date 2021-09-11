@@ -9,7 +9,7 @@ from durak.db import get_db
 from durak.routes.middlewares import required_fields
 from durak.utils.tokens_utils import generate_access_token, generate_refresh_token, get_info_from_refresh_token
 from durak.utils.validators import is_password_valid, is_login_valid
-from utils.constants import SIGN_IN_ERROR, HASH_ALG, ExpiredSignature, SIGN_UP_ERROR
+from durak.utils.constants import SIGN_IN_ERROR, HASH_ALG, ExpiredSignature, SIGN_UP_ERROR
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
