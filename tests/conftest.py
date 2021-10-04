@@ -1,26 +1,29 @@
 import os
 import tempfile
-
+from flask_socketio import SocketIO
+from durak.games import games
 import pytest
+from flask import Flask
 from werkzeug.security import generate_password_hash
 
 from durak import create_app
 from durak.db import get_db, init_db
 from durak.utils.tokens_utils import generate_refresh_token
+from tests.classes.SocketioClients import SocketioClients
 
 
 @pytest.fixture
 def app():
     db_fd, db_path = tempfile.mkstemp()
-    app = create_app({
+    server = create_app({
         'TESTING': True,
         'DATABASE': db_path
     })
 
-    with app.app_context():
+    with server.api.app_context():
         init_db()
 
-    yield app
+    yield server.api
 
     os.close(db_fd)
     os.unlink(db_path)
@@ -29,6 +32,31 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+@pytest.fixture
+def socketio_app():
+    db_fd, db_path = tempfile.mkstemp()
+    server = create_app({
+        'TESTING': True,
+        'DATABASE': db_path
+    })
+    yield server.ws
+
+    os.close(db_fd)
+    os.unlink(db_path)
+
+
+@pytest.fixture
+def socketio_client(socketio_app, app, client):
+    socketio_test_client = socketio_app.test_client(
+        app, flask_test_client=client)
+    return socketio_test_client
+
+
+@pytest.fixture
+def socketio_clients(socketio_app, app, client):
+    return SocketioClients(socketio_app, app, client)
 
 
 @pytest.fixture
@@ -61,3 +89,9 @@ def refresh_token(app, user):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
+
+
+@pytest.fixture(autouse=True)
+def cleanup():
+    games.clear()
+    yield

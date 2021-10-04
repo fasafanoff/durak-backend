@@ -3,6 +3,7 @@ import jwt
 from flask import (
     Blueprint, request
 )
+
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from durak.db import get_db

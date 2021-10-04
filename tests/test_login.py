@@ -7,8 +7,8 @@ from durak.utils.tokens_utils import generate_access_token, generate_refresh_tok
 
 
 def test_config():
-    assert not create_app().testing
-    assert create_app({'TESTING': True}).testing
+    assert not create_app().api.testing
+    assert create_app({'TESTING': True}).api.testing
 
 
 def test_login_no_data(client):
