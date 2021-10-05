@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 
 from durak.Server import Server
-from durak.events.game import search, connect
+from durak.events.game import search
 
 load_dotenv()
 
@@ -13,5 +13,4 @@ def create_app(test_config=None):
     server.add_route(auth.bp)
 
     server.add_event(search)
-    server.add_event(connect)
     return server

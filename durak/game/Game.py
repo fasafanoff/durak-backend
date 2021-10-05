@@ -1,12 +1,9 @@
+from durak.game.Pile import Pile
+
+
 class Game:
 
     def __init__(self):
-        self.table_pile = []
-        self.deck = []
+        self.deck_pile = Pile()
+        self.rest_pile = Pile()
         self.players = []
-        self.player_index = 0
-        self.game_rules = {}
-
-    def make_turn(self):
-        player = self.players[self.player_index]
-        self.game_rules.make_turn(player)

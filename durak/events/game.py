@@ -4,10 +4,6 @@ import uuid
 from durak.games import games
 
 
-def connect():
-    pass
-
-
 def search(game_name, number_of_players):
     game_type_id = game_name + str(number_of_players)
     if game_type_id not in games:
@@ -16,11 +12,9 @@ def search(game_name, number_of_players):
 
     if len(games[game_type_id]) == number_of_players:
         room_id = uuid.uuid1()
-        for _ in range(number_of_players):
+        for _ in range(number_of_players):  
             sid = games[game_type_id].pop()
             join_room(room_id, sid=sid)
-        emit('game_found', to=room_id)
+        emit('game_found', {'room_id': str(room_id)}, to=room_id)
 
-
-def find_room():
-    pass
+# def game_ready(room_id):
