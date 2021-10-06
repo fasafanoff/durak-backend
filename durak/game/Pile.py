@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-
+from random import shuffle
 
 class Pile:
 
@@ -10,7 +10,7 @@ class Pile:
     def get(self):
         return self._pile[:]
 
-# TODO: understand why do I nee add and remove
+# TODO: understand why do I need add and remove
     def add(self, value):
         if isinstance(value, Iterable):
             self._pile.extend(value)
@@ -35,6 +35,10 @@ class Pile:
         other_pile.add(self._pile)
         self._pile.clear()
 
+# TODO: not sure if this should be here
+    def shuffle(self):
+        shuffle(self._pile)
+
     def __len__(self):
         return len(self._pile)
 
@@ -47,3 +51,4 @@ class Pile:
 
         if amount > self.__len__():
             raise Exception(f"Trying to move {amount} items from pile with length {self.__len__()}")
+

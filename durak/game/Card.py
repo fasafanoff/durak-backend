@@ -1,6 +1,6 @@
-class Card:
+class SuitRankCard:
 
-    def __init__(self, rank, suit):
+    def __init__(self, suit, rank):
         self.rank = rank
         self.suit = suit
 
