@@ -6,11 +6,6 @@ from durak.db import get_db
 from durak.utils.tokens_utils import generate_access_token, generate_refresh_token
 
 
-def test_config():
-    assert not create_app().api.testing
-    assert create_app({'TESTING': True}).api.testing
-
-
 def test_login_no_data(client):
     response = client.post('/auth/login')
     assert response.status_code == 400
@@ -36,6 +31,8 @@ def test_login_wrong_password(client, user):
     assert response.status_code == 400
 
 
+# TODO: mock some modules to make this test never fail
+#  datetime.utcnow could differ from call to call
 def test_login_correct_data(client, user, app):
     response = client.post('/auth/login', json=user)
     assert response.status_code == 200

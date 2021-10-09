@@ -3,13 +3,13 @@ from flask import Flask
 from flask_socketio import SocketIO
 
 
-
 class Server:
     ws = None
     api = None
 
     def __init__(self, test_config=None):
-        if Server.ws is not None and Server.api is not None:
+        should_use_old_instance = Server.ws and Server.api
+        if should_use_old_instance:
             return
         Server.api = Flask(__name__, instance_relative_config=True)
         Server.api.config.from_mapping(
@@ -32,11 +32,12 @@ class Server:
 
         Server.ws = SocketIO(Server.api)
 
-
-    def add_route(self, route):
+    @staticmethod
+    def add_route(route):
         Server.api.register_blueprint(route)
 
-    def add_event(self, callback, event_name=None):
+    @staticmethod
+    def add_event(callback, event_name=None):
         if event_name is None:
             Server.ws.event(callback)
         else:

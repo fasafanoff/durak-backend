@@ -1,9 +1,7 @@
 import os
 import tempfile
-from flask_socketio import SocketIO
 from durak.games import games
 import pytest
-from flask import Flask
 from werkzeug.security import generate_password_hash
 
 from durak import create_app
@@ -67,9 +65,12 @@ def user(app):
         password = 'some password'
         password_hash = generate_password_hash(password)
 
-        db.execute('INSERT INTO users (login, password) VALUES(?, ?);',
-                   (login, password_hash))
-        db.commit()
+        user = db.execute("SELECT login FROM users WHERE login=?", (login,)) \
+            .fetchone()
+        if not user:
+            db.execute('INSERT INTO users (login, password) VALUES(?, ?);',
+                       (login, password_hash))
+            db.commit()
         return {'login': login, 'password_hash': password_hash, 'password': password}
 
 
