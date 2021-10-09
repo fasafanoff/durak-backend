@@ -16,5 +16,3 @@ def search(game_name, number_of_players):
             sid = games[game_type_id].pop()
             join_room(room_id, sid=sid)
         emit('game_found', {'room_id': str(room_id)}, to=room_id)
-
-# def game_ready(room_id):
