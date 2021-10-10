@@ -1,15 +1,12 @@
-from durak.game.Pile import Pile
-from durak.game.PileFactory import PileFactory
+from durak.game.Exceptions import InvalidMoveType
 
 
 class Game:
+    def __init__(self, game_rules):
+        self.game_rules = game_rules()
 
-    def __init__(self, players):
-        self.players = players
-        self.rest_pile = PileFactory.create_36_deck()
-        for player in players:
-            self.rest_pile.moveto(player.hand_pile, 6)
-
-        self.used_pile = Pile()
-        self.desk_pile = Pile()
-
+    def make_move(self, move_type, args=None):
+        args = args or {}
+        move_types = self.game_rules.mappings
+        if move_type not in move_types:
+            raise InvalidMoveType(move_type)
