@@ -1,61 +1,57 @@
 from durak.game.Exceptions import AttackingPlayerOutOfBoundary
 
 
-class PlayerQueue:
-    def __init__(self, players, reverse=False, attacking_player_index=0):
-
+class PlayersTurnManager:
+    def __init__(self, players, attacking_player_index=0):
         if attacking_player_index >= len(players):
             raise AttackingPlayerOutOfBoundary(players, attacking_player_index)
 
         self.players = players
         self.number_of_players = len(players)
+        self.should_change_attacker = True
+        self.current = self.attacker = attacking_player_index
+        self.defender = self._wrap_increment(self.attacker)
 
-        # indexes
-        self._current_thrower = self._attacking_player = attacking_player_index
-        self._defending_player = self._move_array_index(
-            attacking_player_index, reverse=reverse
-        )
+    def change_thrower(self) -> None:
+        if self._is_current_thrower_first():
+            return self._make_current_next_player_after_defender()
+        if self._is_current_thrower_last() and self.should_change_attacker:
+            return self._change_attacker()
+        self._make_current_next_player()
 
-        self._reverse = reverse
-
-    def change_thrower(self):
-        self._change_to_next_thrower()
-        if self._is_no_throwers_left():
-            self._change_to_next_attacker()
+    def should_not_change_attacker(self):
+        self.should_change_attacker = False
 
     def change_attacker(self):
-        self._change_to_next_attacker()
-
-    def restart_thrower(self):
-        pass
+        self._change_attacker()
 
     def get_attacker(self):
-        return self.players[self._attacking_player]
+        return self.players[self.attacker]
 
     def get_defender(self):
-        return self.players[self._defending_player]
+        return self.players[self.defender]
 
-    def _change_to_next_thrower(self):
-        self._current_thrower = self._increment_forward_with_wrap(self._current_thrower)
+    def get_current(self):
+        return self.players[self.current]
 
-    def _is_no_throwers_left(self):
-        return self._current_thrower == self._defending_player
+    def _wrap_increment(self, value):
+        return (value + 1) % self.number_of_players
 
-    def _increment_forward_with_wrap(self, value):
-        return self._move_array_index(value, reverse=self._reverse)
+    def _wrap_decrement(self, value):
+        return (value - 1) % self.number_of_players
 
-    def _decrement_forward_with_wrap(self, value):
-        return self._move_array_index(value, reverse=not self._reverse)
+    def _change_attacker(self):
+        self.current = self.attacker = self._wrap_increment(self.attacker)
+        self.defender = self._wrap_increment(self.attacker)
 
-    def _move_array_index(self, value, reverse=False):
-        if reverse:
-            new_value = value - 1
-        else:
-            new_value = value + 1
-        return new_value % self.number_of_players
+    def _is_current_thrower_last(self):
+        return self.current == self._wrap_decrement(self.attacker)
 
-    def _change_to_next_attacker(self):
-        self._current_thrower = self._attacking_player \
-            = self._increment_forward_with_wrap(self._attacking_player)
-        self._defending_player = self._decrement_forward_with_wrap(self._attacking_player)
+    def _is_current_thrower_first(self):
+        return self.current == self.attacker
 
+    def _make_current_next_player_after_defender(self):
+        self.current = self._wrap_increment(self.defender)
+
+    def _make_current_next_player(self):
+        self.current = self._wrap_increment(self.current)

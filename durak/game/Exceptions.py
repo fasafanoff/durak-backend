@@ -9,3 +9,10 @@ class NoCardInPlayersHand(Exception):
         self.card = card
         self.hand = hand
         super().__init__(f"{self.card} was not found in {self.hand}")
+
+
+class AttackingPlayerOutOfBoundary(Exception):
+    def __init__(self, players, index):
+        self.players = players
+        self.index = index
+        super().__init__(f"{self.players} has no index {self.index}")
